@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -35,8 +35,11 @@ const formSchema = z
     message: "Les mots de passe ne correspondent pas",
   });
 
-export default function ActivateAccount() {
+export default function ActivateAccountPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("id");
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,12 +51,9 @@ export default function ActivateAccount() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const searchParams = useSearchParams();
-  const userId = searchParams.get("id");
 
   const password = form.watch("password");
 
-  // Password strength checker
   const getPasswordStrength = (password) => {
     if (!password) return 0;
     let strength = 0;
@@ -66,13 +66,7 @@ export default function ActivateAccount() {
   };
 
   const passwordStrength = getPasswordStrength(password);
-  const strengthColors = [
-    "bg-red-500",
-    "bg-orange-500",
-    "bg-yellow-500",
-    "bg-blue-500",
-    "bg-green-500",
-  ];
+  const strengthColors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-blue-500", "bg-green-500"];
 
   const onSubmit = async (values) => {
     if (!userId) {
@@ -115,6 +109,7 @@ export default function ActivateAccount() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Password field */}
             <FormField
               control={form.control}
               name="password"
@@ -152,7 +147,7 @@ export default function ActivateAccount() {
                         />
                       ))}
                     </div>
-                    <div className="text-xs text-tacir-darkgray space-y-4">
+                    <div className="text-xs text-tacir-darkgray space-y-2">
                       <div className="flex items-center gap-2">
                         {password.length >= 8 ? (
                           <Check className="w-3 h-3 text-green-500" />
@@ -162,27 +157,27 @@ export default function ActivateAccount() {
                         <span>Minimum 8 caractères</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {/[A-Z]/.test(password) ? (
-                          <Check className="w-3 h-3 text-green-500" />
+                        /[A-Z]/.test(password) ? (
+                        <Check className="w-3 h-3 text-green-500" />
                         ) : (
-                          <X className="w-3 h-3 text-red-500" />
-                        )}
+                        <X className="w-3 h-3 text-red-500" />
+                        )
                         <span>Au moins une majuscule</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {/[0-9]/.test(password) ? (
-                          <Check className="w-3 h-3 text-green-500" />
+                        /[0-9]/.test(password) ? (
+                        <Check className="w-3 h-3 text-green-500" />
                         ) : (
-                          <X className="w-3 h-3 text-red-500" />
-                        )}
+                        <X className="w-3 h-3 text-red-500" />
+                        )
                         <span>Au moins un chiffre</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {/[^A-Za-z0-9]/.test(password) ? (
-                          <Check className="w-3 h-3 text-green-500" />
+                        /[^A-Za-z0-9]/.test(password) ? (
+                        <Check className="w-3 h-3 text-green-500" />
                         ) : (
-                          <X className="w-3 h-3 text-red-500" />
-                        )}
+                        <X className="w-3 h-3 text-red-500" />
+                        )
                         <span>Au moins un caractère spécial</span>
                       </div>
                     </div>
@@ -191,6 +186,7 @@ export default function ActivateAccount() {
               )}
             />
 
+            {/* Confirm password field */}
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -208,15 +204,9 @@ export default function ActivateAccount() {
                     <button
                       type="button"
                       className="absolute py-4 right-3 top-1/2 -translate-y-1/2 text-tacir-darkgray hover:text-tacir-blue"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
-                      {showConfirmPassword ? (
-                        <EyeOff size={18} />
-                      ) : (
-                        <Eye size={18} />
-                      )}
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
                   <FormMessage />
@@ -229,33 +219,7 @@ export default function ActivateAccount() {
               className="w-full bg-tacir-green text-white hover:from-green-600 hover:to-tacir-green transition-all duration-300"
               disabled={loading || passwordStrength < 4}
             >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Activation en cours...
-                </span>
-              ) : (
-                "Activer le compte"
-              )}
+              {loading ? "Activation en cours..." : "Activer le compte"}
             </Button>
           </form>
         </Form>
