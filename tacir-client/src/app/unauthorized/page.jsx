@@ -7,6 +7,9 @@ import { getUserRedirectPath, logoutUser } from "@/utils/auth";
 export default function UnauthorizedPage() {
   const router = useRouter();
 
+  // FIX: Define user here
+  const user = null; // Replace with actual user from auth/session if available
+
   const handleGoToDashboard = () => {
     const redirectPath = user ? getUserRedirectPath(user) : "/dashboard";
     router.push(redirectPath);
