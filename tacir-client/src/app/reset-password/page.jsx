@@ -16,12 +16,13 @@ export default function ResetPasswordForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isValidToken, setIsValidToken] = useState(null);
+
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const token = searchParams.get("token");
   const userId = searchParams.get("id");
 
+  // Password strength calculation
   const getPasswordStrength = (password) => {
     if (!password) return 0;
     let strength = 0;
@@ -42,6 +43,7 @@ export default function ResetPasswordForm() {
     "bg-tacir-green",
   ];
 
+  // Check if token is valid
   useEffect(() => {
     const checkToken = async () => {
       if (!token || !userId) {
@@ -49,15 +51,19 @@ export default function ResetPasswordForm() {
         toast.error("Jeton ou ID utilisateur manquant");
         return;
       }
-
-      const isValid = await validateResetToken({ token, userId });
-      setIsValidToken(isValid);
-      if (!isValid) toast.error("Jeton invalide ou expiré");
+      try {
+        const isValid = await validateResetToken({ token, userId });
+        setIsValidToken(isValid);
+        if (!isValid) toast.error("Jeton invalide ou expiré");
+      } catch (error) {
+        setIsValidToken(false);
+        toast.error("Erreur lors de la validation du jeton");
+      }
     };
-
     checkToken();
   }, [token, userId]);
 
+  // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -74,17 +80,11 @@ export default function ResetPasswordForm() {
     setIsLoading(true);
 
     try {
-      const message = await resetPassword({
-        token,
-        userId,
-        newPassword: password,
-      });
+      const message = await resetPassword({ token, userId, newPassword: password });
       toast.success(message || "Mot de passe mis à jour avec succès");
       setTimeout(() => router.push("/auth/login"), 2000);
     } catch (error) {
-      toast.error(
-        error.message || "Échec de la réinitialisation du mot de passe"
-      );
+      toast.error(error.message || "Échec de la réinitialisation du mot de passe");
     } finally {
       setIsLoading(false);
     }
@@ -139,6 +139,7 @@ export default function ResetPasswordForm() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Password Input */}
           <div>
             <label
               htmlFor="password"
@@ -166,7 +167,7 @@ export default function ResetPasswordForm() {
               </button>
             </div>
 
-            {/* Password strength meter */}
+            {/* Password Strength Meter */}
             <div className="mt-2">
               <div className="flex gap-1 h-1 mb-2">
                 {[0, 1, 2, 3, 4].map((i) => (
@@ -217,6 +218,7 @@ export default function ResetPasswordForm() {
             </div>
           </div>
 
+          {/* Confirm Password Input */}
           <div>
             <label
               htmlFor="confirmPassword"
@@ -245,6 +247,7 @@ export default function ResetPasswordForm() {
             </div>
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={isLoading || passwordStrength < 4}
