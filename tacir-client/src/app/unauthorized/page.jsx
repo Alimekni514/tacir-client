@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { AlertTriangle, ArrowLeft, LogOut, Home } from "lucide-react";
 import { getUserRedirectPath, logoutUser } from "@/utils/auth";
 
-export default function UnauthorizedPage({ user }) {
+export default function UnauthorizedPage() {
   const router = useRouter();
 
   const handleGoToDashboard = () => {
