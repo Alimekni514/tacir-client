@@ -2,7 +2,7 @@
 "use client";
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import FormBuilder from "../../../../../components/FormBuilder/FormBuilder";
+import FormBuilder from "../../../../../components/formBuilder/FormBuilder";
 import { Loader2 } from "lucide-react";
 import { getFormById } from "../../../../../services/forms/formServices";
 
