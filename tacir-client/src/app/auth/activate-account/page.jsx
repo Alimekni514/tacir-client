@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -66,7 +66,13 @@ export default function ActivateAccountPage() {
   };
 
   const passwordStrength = getPasswordStrength(password);
-  const strengthColors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-blue-500", "bg-green-500"];
+  const strengthColors = [
+    "bg-red-500",
+    "bg-orange-500",
+    "bg-yellow-500",
+    "bg-blue-500",
+    "bg-green-500",
+  ];
 
   const onSubmit = async (values) => {
     if (!userId) {
@@ -157,27 +163,27 @@ export default function ActivateAccountPage() {
                         <span>Minimum 8 caractères</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        /[A-Z]/.test(password) ? (
-                        <Check className="w-3 h-3 text-green-500" />
+                        {/[A-Z]/.test(password) ? (
+                          <Check className="w-3 h-3 text-green-500" />
                         ) : (
-                        <X className="w-3 h-3 text-red-500" />
-                        )
+                          <X className="w-3 h-3 text-red-500" />
+                        )}
                         <span>Au moins une majuscule</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        /[0-9]/.test(password) ? (
-                        <Check className="w-3 h-3 text-green-500" />
+                        {/[0-9]/.test(password) ? (
+                          <Check className="w-3 h-3 text-green-500" />
                         ) : (
-                        <X className="w-3 h-3 text-red-500" />
-                        )
+                          <X className="w-3 h-3 text-red-500" />
+                        )}
                         <span>Au moins un chiffre</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        /[^A-Za-z0-9]/.test(password) ? (
-                        <Check className="w-3 h-3 text-green-500" />
+                        {/[^A-Za-z0-9]/.test(password) ? (
+                          <Check className="w-3 h-3 text-green-500" />
                         ) : (
-                        <X className="w-3 h-3 text-red-500" />
-                        )
+                          <X className="w-3 h-3 text-red-500" />
+                        )}
                         <span>Au moins un caractère spécial</span>
                       </div>
                     </div>
@@ -190,7 +196,6 @@ export default function ActivateAccountPage() {
             <FormField
               control={form.control}
               name="confirmPassword"
-              className="mt-4"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirmez le mot de passe</FormLabel>
@@ -206,7 +211,11 @@ export default function ActivateAccountPage() {
                       className="absolute py-4 right-3 top-1/2 -translate-y-1/2 text-tacir-darkgray hover:text-tacir-blue"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
-                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      {showConfirmPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
                     </button>
                   </div>
                   <FormMessage />
