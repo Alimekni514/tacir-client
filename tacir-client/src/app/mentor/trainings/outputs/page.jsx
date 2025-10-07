@@ -49,7 +49,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { addSubmissionComment } from "@/services/outputs/output";
 import { getMentorSubmissions } from "@/services/outputs/output";
-const MentorOutputManagement = ({ user }) => {
+const MentorOutputManagement = () => {
   const [outputs, setOutputs] = useState([]);
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
