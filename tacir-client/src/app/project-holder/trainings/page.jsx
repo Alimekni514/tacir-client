@@ -17,7 +17,7 @@ import { apiBaseUrl } from "@/utils/constants";
 import TrainingFiltersProjectHolder from "@/features/trainings/components/TrainingFiltersProjectHolder";
 import MentoringPresenceModal from "@/features/trainings/modals/MentoringPresenceModal";
 
-export const getTrainerNames = (trainers) => {
+ const getTrainerNames = (trainers) => {
   if (!trainers || trainers.length === 0) return "Non spécifié";
   return trainers
     .map((t) => t.personalInfo?.fullName || "Formateur inconnu")

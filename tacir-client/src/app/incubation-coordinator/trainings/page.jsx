@@ -29,7 +29,7 @@ import TrainingFilters from "@/features/trainings/components/TrainingFilters";
 import { TrainingStatsCard } from "@/features/trainings/components/TrainingStatsCard";
 import TrainingDetailsModal from "@/features/trainings/components/TrainingDetailsModal";
 import { typeConfig } from "@/features/trainings/components/style.config";
-export const getTrainerNames = (trainers) => {
+ const getTrainerNames = (trainers) => {
   if (!trainers || trainers.length === 0) return "Non spécifié";
   return trainers
     .map((t) => t.personalInfo?.fullName || "Formateur inconnu")
